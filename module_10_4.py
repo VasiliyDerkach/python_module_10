@@ -1,5 +1,5 @@
 from threading import Thread
-from queue import Queue
+from queue import Queue, Empty
 from time import sleep
 
 class Table:
@@ -12,29 +12,25 @@ class Table:
 class Cafe :
     def __init__(self, Tables):
         self.queue = Queue() # очередь прибывающих в кафе
-        self.waiting = Queue() # очередь ожидающих столика в кафе
-        self.to_out = Queue() # очередь для завершения обсуживания
+        self.going = Queue() # очередь поевших в кафе на выход
         self.tables = Tables
+        self.status = True #кафе закрыто/открыто работа до последнего посетителя
     def customer_arrival(self):
         for i in range(20):
             customer = Customer(i+1)
             self.queue.put(customer)
-            print(f'Посетитель номер {customer.number} прибыл')
-            sleep(1)
+            print(f'Посетитель номер {customer.number} прибыл\n', end='')
+            sleep(2)
 
     def busy(self, table_n, table_status):
         self.tables[table_n].busy(table_status)
     def serve_customer(self):
-        if self.waiting.qsize()>0:
-            customer = self.waiting.get()
-        else:
-            customer = self.queue.get()
-        while customer:
+
+        customer = self.queue.get()
+        while self.status:
             if customer.status in ('arrival','in queue'):
-                have_busy = False #проверка наличия свободного стола
-
                 for t in self.tables:
-
+                    have_busy = False  # проверка наличия свободного стола
                     if not t.is_busy:
                         have_busy = True
                         t.busy(True)
@@ -42,31 +38,39 @@ class Cafe :
                         n = t.number
                         break
                 if have_busy:
-                    print(f'Посетитель номер {customer.number} сел за стол {n}. ')
-                    self.to_out.put(customer)
-                    sleep(5)
+                    print(f'Посетитель номер {customer.number} сел за стол {n}.\n', end='')
+                    #sleep(5)
+                    self.going.put(customer)
+                    try:
+                        customer = self.queue.get()
+                    except Empty:
+                        print('Все пришедшие посетители сели за столы')
+                        break
                 else:
-                    oldc = customer.status
-                    customer.status = 'in queue'
-                    self.waiting.put(customer)
-                    if oldc!='in queue':
-                        print(f'Посетитель номер {customer.number} ожидает свободный стол.')
-                if self.waiting.qsize()>0:
-                    customer = self.waiting.get()
-                else:
-                    customer = self.queue.get()
+                    if customer.status!='in queue':
+                        customer.set_customer_status('in queue', None)
+                        print(f'Посетитель номер {customer.number} ожидает свободный стол.\n', end='')
+            elif customer.status=='bouncer':
+                break
 
     def go_customer(self):
-        if self.to_out.qsize()>0:
-            custom = self.to_out.get()
+        while True:
+            try:
+                custom = self.going.get(timeout=3)
+            except Empty:
+                print('Все пришедшие посетители поели и ушли')
+                self.status = False
+                # отправляем закрывающего кафе сотрудника
+                customer = Customer(-1)
+                customer.set_customer_status('bouncer',None)
+                self.queue.put(customer)
 
-            while custom:
-                if custom.status=='table':
-                    sleep(3)
-                    custom.table.busy(False)
-                    custom.set_customer_status('go', None)
-                    print(f'Посетитель номер {custom.number} покушал и ушёл')
-                    custom = self.to_out.get()
+                break
+            if custom.status=='table':
+                sleep(5)
+                custom.table.busy(False)
+                custom.set_customer_status('go', None)
+                print(f'Посетитель номер {custom.number} покушал и ушёл\n', end='')
 
 class Customer:
     def __init__(self, number):
