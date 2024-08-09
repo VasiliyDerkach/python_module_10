@@ -25,11 +25,16 @@ if __name__ == '__main__':
     # print(driver.title)
     # lst = driver.find_element(By.ID, 'cont2')
     # print(lst.text)
-    conts = {'tab1':'cont1','tab2':'cont2','tab3':'cont3'}
+    conts = {'tab1':('cont1','ДЕЛО'),'tab2':('cont2','ДВИЖЕНИЕ ДЕЛА'),'tab3':('cont3','СТОРОНЫ ПО ДЕЛУ')}
     for cn, tx in conts.items():
         #lst = driver.find_element(By.ID,cn)
         lst1 = driver.find_element(By.ID,cn)
         lst1.click()
-        tc = driver.find_element(By.ID,tx)
-        print(lst1.text)
+        tc = driver.find_element(By.ID,tx[0])
+        while not tc.is_displayed():
+            pass
+        htm = driver.page_source
+        htm1 = pd.read_html(htm, match=tx[1])
+        #print(lst1.text)
         print(tc.text)
+        print(htm1)
