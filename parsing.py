@@ -28,15 +28,8 @@ if __name__ == '__main__':
     # print(driver.title)
     # lst = driver.find_element(By.ID, 'cont2')
     # print(lst.text)
-    #conts = {'tab1':('cont1','tablcont',[]),'tab2':('cont2','tablcont',[]),'tab3':('cont3','tablcont',[])
-    # ,'tab4':('cont4','tablcont',[]), ,'tab5':('cont5','tablcont',[]),'tab6':('cont6','tablcont',[])}
-    conts = {'None':('tablcont','tablcont',[1])}
-    # ключ conts имя html закладки на сайте на которую надо переходить перед считыванием таблицы, если он None
-    # значит страница сайта без закладок
-    # первый элемент кортежа - имя html элемента, в который вложена таблица
-    # второй элемент кортежа - имя html элемента таблицы (если совпадает с предыдущем, то таблицу сразу можно найти по ее имени)
-    # третий элемент кортежа - список столбцов таблицы, которые надо проверить на наличие ссылок
-    # если последний элемент пуст [] - то проверять на ссылки не надо. Ссылки добавляются в итоговую таблицу как доп.столбец справа
+    #conts = {'tab1':('cont1','tablcont'),'tab2':('cont2','tablcont'),'tab3':('cont3','tablcont')}
+    conts = {'None':('tablcont','tablcont')}
     recr = {}
     for cn, tx in conts.items():
         #lst = driver.find_element(By.ID,cn)
@@ -64,14 +57,13 @@ if __name__ == '__main__':
                 # for f in refs:
                 #     print(f.text)
                 cl = []
-                for j,c in cols:
+                for c in cols:
                     cl.append(c.text)
-                    if len(tx[3])>0 and j in tx[3]:
-                        try:
-                            r = c.get_attribute('href')
-                            cl.append(r.text)
-                        except:
-                            pass
+                    try:
+                        r = c.get_attribute('href')
+                        cl.append(r.text)
+                    except:
+                        pass
                 if len(cl)>0:
                     tab.append(cl)
             # tabtxt = []
