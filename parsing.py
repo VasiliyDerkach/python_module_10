@@ -28,8 +28,9 @@ if __name__ == '__main__':
     # print(driver.title)
     # lst = driver.find_element(By.ID, 'cont2')
     # print(lst.text)
-    #conts = {'tab1':('cont1','tablcont'),'tab2':('cont2','tablcont'),'tab3':('cont3','tablcont')}
-    conts = {'None':('tablcont','tablcont')}
+    #conts = {'tab1':('cont1','tablcont',[]),'tab2':('cont2','tablcont',[]),'tab3':('cont3','tablcont',[])
+    # ,'tab4':('cont4','tablcont',[]), ,'tab5':('cont5','tablcont',[]),'tab6':('cont6','tablcont',[])}
+    conts = {'None':('tablcont','tablcont'""",[1]""")}
     recr = {}
     for cn, tx in conts.items():
         #lst = driver.find_element(By.ID,cn)
