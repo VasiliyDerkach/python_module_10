@@ -1,5 +1,6 @@
 
 import inspect
+# ДЗ интроспеция
 def introspection_info(obj):
     lst = dir(obj)
     meth = []
