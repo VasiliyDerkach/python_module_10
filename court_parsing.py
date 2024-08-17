@@ -84,9 +84,9 @@ if __name__ == '__main__':
                         if len(cl)>0:
                             tab.append(cl)
                     thh = []
-                    for he in thead:
-                        thh.append(he.text)
-                    if len(thh)>0:
+                    if len(thead)>0:
+                        for he in thead:
+                            thh.append(he.text)
                         recr[cn]['head'] = thh
                     if len(tab)>0:
                         recr[cn]['table'] = tab
