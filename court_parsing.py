@@ -82,21 +82,27 @@ if __name__ == '__main__':
                                     except Exception as ex0:
                                         pass
                         if len(cl)>0:
-                            tab.append(cl)
+                            try:
+                                tab.append(cl)
+                            except Exception as ecl:
+                                print(ecl)
                     thh = []
+                    recr[cn]={}
                     if len(thead)>0:
                         for he in thead:
                             thh.append(he.text)
-                        recr[cn]['head'] = thh
+                        recr[cn]['head']=thh
                     if len(tab)>0:
                         recr[cn]['table'] = tab
             except Exception as exc:
                 print(f'не загрузилось {exc}')
-    for k,e in recr.items():
-        print(('-------'))
-        for ce in e:
-            print(ce)
-
+    # for k,e in recr.items():
+    #     print(('-------'))
+    #     for p,ce in e['head']:
+    #         print(ce)
+    #     for p,ce in e['table']:
+    #         print(ce)
+    print(recr)
 
     driver.quit()
 """    driver = Chrome()
