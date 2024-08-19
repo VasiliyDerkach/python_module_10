@@ -20,8 +20,7 @@ if __name__ == '__main__':
     #url = 'https://oktiabrsky--svd.sudrf.ru/modules.php?name=sud_delo&srv_num=1&name_op=r&delo_id=1540005&case_type=0&new=0&G1_PARTS__NAMESS=&g1_case__CASE_NUMBERSS=&g1_case__JUDICIAL_UIDSS=&captcha=36960&captchaid=lvl06vonmve1j68ilun3aeqph0&delo_table=g1_case&g1_case__ENTRY_DATE1D=&g1_case__ENTRY_DATE2D=&lawbookarticles%5B%5D=%D1%EF%EE%F0%FB%2C+%E2%EE%E7%ED%E8%EA%E0%FE%F9%E8%E5+%E8%E7+%F2%F0%F3%E4%EE%E2%FB%F5+%EE%F2%ED%EE%F8%E5%ED%E8%E9&G1_CASE__JUDGE=&g1_case__RESULT_DATE1D=&g1_case__RESULT_DATE2D=&G1_CASE__RESULT=&G1_CASE__BUILDING_ID=&G1_CASE__COURT_STRUCT=&G1_EVENT__EVENT_NAME=&G1_EVENT__EVENT_DATEDD=&G1_PARTS__PARTS_TYPE=&G1_PARTS__INN_STRSS=&G1_PARTS__KPP_STRSS=&G1_PARTS__OGRN_STRSS=&G1_PARTS__OGRNIP_STRSS=&G1_RKN_ACCESS_RESTRICTION__RKN_REASON=&g1_rkn_access_restriction__RKN_RESTRICT_URLSS=&g1_requirement__ACCESSION_DATE1D=&g1_requirement__ACCESSION_DATE2D=&G1_REQUIREMENT__CATEGORY=&g1_requirement__ESSENCESS=&g1_requirement__JOIN_END_DATE1D=&g1_requirement__JOIN_END_DATE2D=&G1_REQUIREMENT__PUBLICATION_ID=&G1_DOCUMENT__PUBL_DATE1D=&G1_DOCUMENT__PUBL_DATE2D=&G1_CASE__VALIDITY_DATE1D=&G1_CASE__VALIDITY_DATE2D=&G1_ORDER_INFO__ORDER_DATE1D=&G1_ORDER_INFO__ORDER_DATE2D=&G1_ORDER_INFO__ORDER_NUMSS=&G1_ORDER_INFO__EXTERNALKEYSS=&G1_ORDER_INFO__STATE_ID=&G1_ORDER_INFO__RECIP_ID=&Submit=%CD%E0%E9%F2%E8'
     driver.get(url)
 
-    conts = {'tab1':('cont1','tablcont',[]),'tab2':('cont2','tablcont',[]),'tab3':('cont3','tablcont',[])
-     ,'tab4':('cont4','tablcont',[]), 'tab5':('cont5','tablcont',[]),'tab6':('cont6','tablcont',[])}
+    conts = {'tab4':('cont4','tablcont',[])}
     #conts = {'None':('tablcont','tablcont',[1])}
     # ключ conts имя html закладки на сайте на которую надо переходить перед считыванием таблицы, если он None
     # значит страница сайта без закладок
@@ -46,67 +45,9 @@ if __name__ == '__main__':
                 tc = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.ID, tx[0]))
                 )
-                # предусмотреть чтение заголовков таблиц
-                if tx[0]==tx[1]:
-                    htms[0] = tc
-                else:
-                    htms = tc.find_elements(By.ID, tx[1])
+                htms = tc.find_element(By.TAG_NAME, 'Заявитель')
                     #предусмотреть случаи (реально есть), когда элементов tx[1] несколько на закладке (несколько таблиц)
-                for htm in htms:
-                    try:
-                        thead = htm.find_elements(by=By.TAG_NAME, value='th')
-                    except:
-                        thead = []
-                    rows = htm.find_elements(by=By.TAG_NAME, value='tr')
-                    # подсчет количества столбцов
-                    tab = []
-                    for r in rows:
-                        cols = r.find_elements(by=By.TAG_NAME, value='td')
-                        #refs = r.find_elements(by=By.TAG_NAME,value='ref')
-                        # for f in refs:
-                        #     print(f.text)
-                        cl = []
-                        ln = len(cols)
-                        if isinstance(cols,list) and ln>0:
-                            j = 0
-                            for c in cols:
-                                cl.append(c.text)
 
-                                j += 1
-                                if len(tx[2])>0 and j in tx[2]:
-                                    try:
-                                        #rr = c.get_attribute('href')
-                                        y = c.find_element(by=By.LINK_TEXT, value=c.text)
-                                        if y:
-                                            cl.append(y.get_attribute('href'))
-                                    except Exception as ex0:
-                                        pass
-                        if len(cl)>0:
-                            try:
-                                tab.append(cl)
-                            except Exception as ecl:
-                                print(ecl)
-                    thh = []
-                    recr[cn]={}
-                    if len(thead)>0:
-                        for he in thead:
-                            thh.append(he.text)
-                        recr[cn]['head']=thh
-                    if len(tab)>0:
-                        recr[cn]['table'] = tab
             except Exception as exc:
                 print(f'не загрузилось {exc}')
-    # for k,e in recr.items():
-    #     print(('-------'))
-    #     for p,ce in e['head']:
-    #         print(ce)
-    #      for p,ce in e['table']:
-    #         print(ce)
-    print(recr)
-
-    driver.quit()
-"""    driver = Chrome()
-    url = 'https://chkalovsky--svd.sudrf.ru/modules.php?name=sud_delo&srv_num=1&name_op=r&delo_id=1540005&case_type=0&new=0&G1_PARTS__NAMESS=&g1_case__CASE_NUMBERSS=&g1_case__JUDICIAL_UIDSS=&captcha=65736&captchaid=16pihpfpksoa7ncagilpqli7e2&delo_table=g1_case&g1_case__ENTRY_DATE1D=&g1_case__ENTRY_DATE2D=&lawbookarticles%5B%5D=%D1%EF%EE%F0%FB%2C+%E2%EE%E7%ED%E8%EA%E0%FE%F9%E8%E5+%E8%E7+%F2%F0%F3%E4%EE%E2%FB%F5+%EE%F2%ED%EE%F8%E5%ED%E8%E9&G1_CASE__JUDGE=&g1_case__RESULT_DATE1D=&g1_case__RESULT_DATE2D=&G1_CASE__RESULT=&G1_CASE__BUILDING_ID=&G1_CASE__COURT_STRUCT=&G1_EVENT__EVENT_NAME=&G1_EVENT__EVENT_DATEDD=&G1_PARTS__PARTS_TYPE=&G1_PARTS__INN_STRSS=&G1_PARTS__KPP_STRSS=&G1_PARTS__OGRN_STRSS=&G1_PARTS__OGRNIP_STRSS=&G1_RKN_ACCESS_RESTRICTION__RKN_REASON=&g1_rkn_access_restriction__RKN_RESTRICT_URLSS=&g1_requirement__ACCESSION_DATE1D=&g1_requirement__ACCESSION_DATE2D=&G1_REQUIREMENT__CATEGORY=&g1_requirement__ESSENCESS=&g1_requirement__JOIN_END_DATE1D=&g1_requirement__JOIN_END_DATE2D=&G1_REQUIREMENT__PUBLICATION_ID=&G1_DOCUMENT__PUBL_DATE1D=&G1_DOCUMENT__PUBL_DATE2D=&G1_CASE__VALIDITY_DATE1D=&G1_CASE__VALIDITY_DATE2D=&G1_ORDER_INFO__ORDER_DATE1D=&G1_ORDER_INFO__ORDER_DATE2D=&G1_ORDER_INFO__ORDER_NUMSS=&G1_ORDER_INFO__EXTERNALKEYSS=&G1_ORDER_INFO__STATE_ID=&G1_ORDER_INFO__RECIP_ID=&Submit=%CD%E0%E9%F2%E8'
-    driver.get(url)
-    time.sleep(5)
-    driver.quit()"""
+            print(htms.location,htms.parent)
