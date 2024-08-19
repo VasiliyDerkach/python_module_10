@@ -23,7 +23,9 @@ if __name__ == '__main__':
     conts = {'tab1':('cont1','tablcont',[],'table'),'tab2':('cont2','tablcont',[],'table')
         ,'tab3':('cont3','tablcont',[],'table')
      ,'tab4':('cont4','tablcont',[],'table'), 'tab5':('cont5','cont_doc1',[],'doc')
-        ,'tab6':('cont6','tablcont',[],'table')}
+        ,'tab6':('cont6','tablcont',[],'table'), 'tab7':('cont7','cont_doc1',[],'doc')}
+    # 6 исп.листы? 7-кассац.опред.
+    # conts = {'tab5':('cont5','cont_doc1',[],'doc')}
     #conts = {'None':('tablcont','tablcont',[1],'table')}
     # ключ conts имя html закладки на сайте на которую надо переходить перед считыванием таблицы, если он None
     # значит страница сайта без закладок
@@ -56,7 +58,8 @@ if __name__ == '__main__':
                     #предусмотреть случаи (реально есть), когда элементов tx[1] несколько на закладке (несколько таблиц)
                 for htm in htms:
                     if tx[3]=='doc':
-                        pass
+                        #print(htm.text)
+                        thead = htm.text
                     elif tx[3]=='table':
                         try:
                             thead = htm.find_elements(by=By.TAG_NAME, value='th')
@@ -93,10 +96,12 @@ if __name__ == '__main__':
                                     print(ecl)
                     thh = []
                     recr[cn]={}
-                    if len(thead)>0:
+                    if tx[3]=='table' and len(thead)>0:
                         for he in thead:
                             thh.append(he.text)
                         recr[cn]['head']=thh
+                    elif tx[3]=='doc':
+                        recr[cn]['head'] = thead
                     if len(tab)>0:
                         recr[cn]['table'] = tab
             except Exception as exc:
