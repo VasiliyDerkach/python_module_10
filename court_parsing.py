@@ -24,7 +24,7 @@ if __name__ == '__main__':
         ,'tab3':('cont3','tablcont',[],'table')
      ,'tab4':('cont4','tablcont',[],'table'), 'tab5':('cont5','cont_doc1',[],'doc')
         ,'tab6':('cont6','tablcont',[],'table'), 'tab7':('cont7','cont_doc1',[],'doc')}
-    # 6 исп.листы? 7-кассац.опред.
+    # 6  исп.листы? 7-кассац.опред.
     # conts = {'tab5':('cont5','cont_doc1',[],'doc')}
     #conts = {'None':('tablcont','tablcont',[1],'table')}
     # ключ conts имя html закладки на сайте на которую надо переходить перед считыванием таблицы, если он None
